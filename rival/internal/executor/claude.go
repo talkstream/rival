@@ -3,7 +3,6 @@ package executor
 import (
 	"context"
 	"io"
-	"os"
 	"os/exec"
 
 	"github.com/1F47E/rival/internal/config"
@@ -44,6 +43,10 @@ func runClaudeNative(ctx context.Context, sess *session.Session, prompt, effort,
 		"--system-prompt", config.SystemPrompt,
 	}
 
-	env := os.Environ()
-	return RunSubprocess(ctx, sess, "claude", args, env, prompt, mirror)
+	// Pass nil so RunSubprocess applies safeEnv() only. Passing os.Environ() here
+	// is appended AFTER safeEnv() inside RunSubprocess, which (per Go's cmd.Env
+	// last-wins semantics) defeats the safeEnv filter for HTTP_PROXY, DYLD_*,
+	// NODE_OPTIONS, and LD_PRELOAD. Codex, Gemini, and Docker executors all pass
+	// nil — this aligns the native Claude executor with them.
+	return RunSubprocess(ctx, sess, "claude", args, nil, prompt, mirror)
 }
