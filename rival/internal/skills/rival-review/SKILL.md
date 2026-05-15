@@ -4,7 +4,7 @@ version: 3.10.0
 description: Run Codex + Gemini code reviews with role-specific prompts and consilium judge via the rival binary. Use only when the user explicitly invokes /rival-review.
 argument-hint: "[-re level] [scope]"
 context: fork
-allowed-tools: Bash
+allowed-tools: Bash(rival:*)
 ---
 
 # Megareview Runner (rival binary)
