@@ -6,6 +6,7 @@ import (
 	"io"
 	"os"
 	"os/exec"
+	"path/filepath"
 	"strings"
 
 	"github.com/1F47E/rival/internal/config"
@@ -65,21 +66,23 @@ func ClaudeDockerPreflight() error {
 }
 
 func buildClaudeDockerImage() error {
-	// Write embedded Dockerfile to temp file.
-	tmpFile, err := os.CreateTemp("", "rival-claude-dockerfile-*")
+	// Write embedded Dockerfile to a temp directory used as the build context.
+	// Using "." would send the entire current working directory (potentially
+	// gigabytes of repo files) to the Docker daemon for a build that needs
+	// nothing but the Dockerfile itself.
+	tmpDir, err := os.MkdirTemp("", "rival-claude-build-*")
 	if err != nil {
-		return fmt.Errorf("create temp dockerfile: %w", err)
+		return fmt.Errorf("create temp build dir: %w", err)
 	}
-	defer os.Remove(tmpFile.Name())
+	defer os.RemoveAll(tmpDir)
 
-	if _, err := tmpFile.WriteString(claudeDockerfile); err != nil {
-		tmpFile.Close()
+	dockerfilePath := filepath.Join(tmpDir, "Dockerfile")
+	if err := os.WriteFile(dockerfilePath, []byte(claudeDockerfile), 0644); err != nil {
 		return fmt.Errorf("write dockerfile: %w", err)
 	}
-	tmpFile.Close()
 
-	// Build image.
-	cmd := exec.Command("docker", "build", "-t", claudeDockerImage, "-f", tmpFile.Name(), ".")
+	// Build image with the temp dir as context (contains only the Dockerfile).
+	cmd := exec.Command("docker", "build", "-t", claudeDockerImage, tmpDir)
 	cmd.Stdout = os.Stderr // Show build progress on stderr.
 	cmd.Stderr = os.Stderr
 	if err := cmd.Run(); err != nil {
