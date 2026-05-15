@@ -49,6 +49,27 @@ func Init(version string) {
 	})
 
 	enabled = true
+	showFirstRunNotice()
+}
+
+// showFirstRunNotice prints a one-time stderr notice on first telemetry-enabled
+// invocation, then writes a marker file so subsequent runs stay quiet.
+func showFirstRunNotice() {
+	home, err := os.UserHomeDir()
+	if err != nil {
+		return
+	}
+	marker := filepath.Join(home, ".rival", ".telemetry-notice-shown")
+	if _, err := os.Stat(marker); err == nil {
+		return // already shown
+	}
+
+	fmt.Fprintln(os.Stderr, "rival: anonymous telemetry is on (Sentry + PostHog).")
+	fmt.Fprintln(os.Stderr, "       Opt out: export DO_NOT_TRACK=1  (or RIVAL_NO_TELEMETRY=1)")
+	fmt.Fprintln(os.Stderr, "       See: https://github.com/1F47E/rival#privacy")
+
+	_ = os.MkdirAll(filepath.Dir(marker), 0700)
+	_ = os.WriteFile(marker, []byte(time.Now().UTC().Format(time.RFC3339)+"\n"), 0600)
 }
 
 // Flush must be deferred in main to ensure events are sent before exit.

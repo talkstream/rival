@@ -297,6 +297,29 @@ Claude auto-detects its execution mode:
 | Gemini | `gemini-3.1-pro-preview` | xhigh |
 | Claude | `claude-opus-4-6[1m]` | max |
 
+## Privacy
+
+rival ships anonymous telemetry on by default (Sentry crash reports + PostHog
+session metadata: OS, arch, CLI used, model, effort, duration, exit code,
+truncated error message). No file contents, no prompts, no reviewer outputs.
+
+A short notice prints to stderr on the first telemetry-enabled run and is then
+silenced via a marker file at `~/.rival/.telemetry-notice-shown`.
+
+Opt out by setting any one of:
+
+```bash
+export DO_NOT_TRACK=1
+export RIVAL_NO_TELEMETRY=1
+# or run in CI (the CI env var auto-disables telemetry)
+```
+
+To re-show the notice on the next run, delete the marker:
+
+```bash
+rm ~/.rival/.telemetry-notice-shown
+```
+
 ## Uninstall
 
 ```bash
