@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"os"
 
+	"github.com/1F47E/rival/internal/config"
 	"github.com/1F47E/rival/internal/session"
 	"github.com/1F47E/rival/internal/telemetry"
 	"github.com/1F47E/rival/internal/update"
@@ -46,6 +47,11 @@ var rootCmd = &cobra.Command{
 		cmd.SetOut(os.Stdout)
 		_ = cmd.Usage()
 	},
+}
+
+func init() {
+	rootCmd.PersistentFlags().BoolVar(&config.ClaudeUnsafe, "unsafe", config.ClaudeUnsafe,
+		"pass --dangerously-skip-permissions to the Claude subprocess (default true for backward compat; set --unsafe=false or RIVAL_CLAUDE_UNSAFE=false to disable)")
 }
 
 func Execute() {

@@ -3,9 +3,29 @@ package config
 import (
 	"os"
 	"path/filepath"
+	"strings"
 
 	"gopkg.in/yaml.v3"
 )
+
+// ClaudeUnsafe controls whether rival passes --dangerously-skip-permissions to
+// the Claude subprocess. Default is true to preserve existing behaviour (claude
+// -p is non-interactive and cannot otherwise approve permission prompts).
+// Override with the --unsafe persistent flag or RIVAL_CLAUDE_UNSAFE env var
+// (accepts: false, 0, no, off — case-insensitive).
+var ClaudeUnsafe = parseClaudeUnsafe()
+
+func parseClaudeUnsafe() bool {
+	v, ok := os.LookupEnv("RIVAL_CLAUDE_UNSAFE")
+	if !ok {
+		return true
+	}
+	switch strings.ToLower(strings.TrimSpace(v)) {
+	case "false", "0", "no", "off", "":
+		return false
+	}
+	return true
+}
 
 const (
 	CodexModel  = "gpt-5.5"

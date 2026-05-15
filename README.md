@@ -289,6 +289,22 @@ Claude auto-detects its execution mode:
 - To rebuild: `docker rmi rival-claude`, next run rebuilds automatically
 - TUI shows `⬡ claude/dk` for Docker sessions, `⬡ claude` for native
 
+### Permission mode (`--unsafe`)
+
+By default rival passes `--dangerously-skip-permissions` to the Claude subprocess in both native and Docker modes. This is required because `claude -p` runs non-interactively and cannot otherwise prompt for filesystem/shell approvals — without the flag the reviewer would stall or fail.
+
+The trade-off: a prompt-injection payload inside the reviewed code (e.g. a malicious comment) could instruct Claude to run arbitrary shell commands against your hosted repo without further confirmation.
+
+Opt out (at the cost of losing Claude reviews unless you configure granular permissions ahead of time):
+
+```bash
+rival review --unsafe=false src/                # one-shot
+RIVAL_CLAUDE_UNSAFE=false rival review src/     # per-shell
+export RIVAL_CLAUDE_UNSAFE=false                # persist
+```
+
+Only use rival on repositories you trust until you have evaluated this trade-off.
+
 ## Models
 
 | CLI | Model | Default Effort |

@@ -40,8 +40,10 @@ func runClaudeNative(ctx context.Context, sess *session.Session, prompt, effort,
 		"--effort", claudeEffort,
 		"--output-format", "text",
 		"--no-session-persistence",
-		"--dangerously-skip-permissions",
 		"--system-prompt", config.SystemPrompt,
+	}
+	if config.ClaudeUnsafe {
+		args = append(args, "--dangerously-skip-permissions")
 	}
 
 	env := os.Environ()
