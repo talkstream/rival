@@ -5,6 +5,7 @@ description: Run Claude through the rival binary in an isolated subagent. Use on
 argument-hint: "[-re level] [review [scope] | prompt]"
 context: fork
 allowed-tools: Bash
+disable-model-invocation: true
 ---
 
 # Claude Runner (rival binary)

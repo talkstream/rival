@@ -5,6 +5,7 @@ description: Run Codex through the rival binary in an isolated subagent. Use onl
 argument-hint: "[-re level] [review [scope] | prompt]"
 context: fork
 allowed-tools: Bash
+disable-model-invocation: true
 ---
 
 # Codex Runner (rival binary)

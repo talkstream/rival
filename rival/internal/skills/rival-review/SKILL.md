@@ -5,6 +5,7 @@ description: Run Codex + Gemini code reviews with role-specific prompts and cons
 argument-hint: "[-re level] [scope]"
 context: fork
 allowed-tools: Bash
+disable-model-invocation: true
 ---
 
 # Megareview Runner (rival binary)
