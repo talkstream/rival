@@ -75,7 +75,7 @@ func commandClaudeAction(cmd *cobra.Command, args []string) error {
 		mode = "review"
 	}
 
-	sess, err := session.New("claude", mode, config.ClaudeModel, parsed.Effort, workdir, parsed.Prompt, parsed.ReviewScope, "")
+	sess, err := session.New(session.Opts{CLI: "claude", Mode: mode, Model: config.ClaudeModel, Effort: parsed.Effort, WorkDir: workdir, Prompt: parsed.Prompt, ReviewScope: parsed.ReviewScope})
 	if err == nil {
 		sess.Account = config.ClaudeSubscription()
 	}

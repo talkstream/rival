@@ -4,7 +4,6 @@ import (
 	"context"
 	"fmt"
 	"io"
-	"os"
 	"os/exec"
 
 	"github.com/1F47E/rival/internal/config"
@@ -33,7 +32,9 @@ func RunGemini(ctx context.Context, sess *session.Session, prompt, effort, workd
 		"--sandbox",
 	}
 
-	env := os.Environ()
+	// Pass nil for extra env: RunSubprocess seeds the child environment from
+	// safeEnv() (filtered os.Environ()). Passing os.Environ() here would
+	// re-append the unfiltered environment and let blocked vars slip back in.
 	fullPrompt := config.SystemPrompt + "\n\n" + prompt
-	return RunSubprocess(ctx, sess, "agy", args, env, fullPrompt, mirror)
+	return RunSubprocess(ctx, sess, "agy", args, nil, fullPrompt, mirror)
 }

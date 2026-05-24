@@ -36,6 +36,12 @@ var rootCmd = &cobra.Command{
 	SilenceErrors: true,
 	SilenceUsage:  true,
 	PersistentPreRun: func(cmd *cobra.Command, args []string) {
+		// Skip startup housekeeping (an O(N) scan of all session files + a
+		// network update check) for trivial commands that do no session work.
+		switch cmd.Name() {
+		case "version", "help", "completion", "update":
+			return
+		}
 		session.ReapOrphans()
 		update.Check(Version)
 	},

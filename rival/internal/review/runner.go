@@ -163,7 +163,7 @@ func runReviewer(ctx context.Context, cli, groupID, scope, effort, workdir strin
 
 	prompt := BuildRolePrompt(role, scope)
 
-	sess, err := session.New(cli, "megareview", model, effort, workdir, prompt, scope, groupID)
+	sess, err := session.New(session.Opts{CLI: cli, Mode: "megareview", Model: model, Effort: effort, WorkDir: workdir, Prompt: prompt, ReviewScope: scope, GroupID: groupID})
 	if err != nil {
 		return cliResult{CLI: cli, Model: model, Role: role, Err: fmt.Errorf("create session: %w", err)}
 	}
@@ -222,7 +222,7 @@ func runConsilium(ctx context.Context, judgeCLI string, inputs []ReviewInput, sc
 
 	model := modelForCLI(judgeCLI)
 
-	sess, err := session.New(judgeCLI, "consilium", model, effort, workdir, prompt, scope, groupID)
+	sess, err := session.New(session.Opts{CLI: judgeCLI, Mode: "consilium", Model: model, Effort: effort, WorkDir: workdir, Prompt: prompt, ReviewScope: scope, GroupID: groupID})
 	if err != nil {
 		return nil, fmt.Errorf("create consilium session: %w", err)
 	}
