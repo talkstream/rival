@@ -9,7 +9,7 @@ allowed-tools: Bash
 
 # Gemini Runner (rival binary)
 
-Run Google Gemini CLI via the `rival` Go binary. All work happens in a forked subagent.
+Run Gemini 3.5 Flash via the `rival` Go binary (backed by the Antigravity CLI `agy`). All work happens in a forked subagent.
 
 ## Instructions
 
@@ -20,14 +20,13 @@ Run Google Gemini CLI via the `rival` Go binary. All work happens in a forked su
 If `$ARGUMENTS` is empty or blank, respond with this usage message and STOP:
 
 > **Usage:**
-> - `/rival-gemini-only 'explain the auth flow'` — run any prompt via gemini
-> - `/rival-gemini-only -re high 'analyze this complex algorithm'` — use high thinking budget
+> - `/rival-gemini-only 'explain the auth flow'` — run any prompt via Gemini 3.5 Flash
 > - `/rival-gemini-only review` — code review (auto-detects changed files via git)
 > - `/rival-gemini-only review src/api/` — review specific scope (bypasses git detection)
-> - `/rival-gemini-only -re xhigh review src/api/` — review with xhigh reasoning
 > - `/rival-gemini` — show this usage info
 >
-> **Reasoning effort** (`-re`): `low`, `medium`, `high` (default), `xhigh`
+> Gemini runs via the Antigravity CLI (`agy`). The `-re` effort flag is accepted for
+> compatibility with the other CLIs but is not forwarded — `agy` has no thinking-level knob.
 
 ### Execute
 

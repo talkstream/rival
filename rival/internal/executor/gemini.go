@@ -2,81 +2,38 @@ package executor
 
 import (
 	"context"
-	"encoding/json"
 	"fmt"
 	"io"
 	"os"
 	"os/exec"
-	"path/filepath"
 
 	"github.com/1F47E/rival/internal/config"
 	"github.com/1F47E/rival/internal/session"
-	"github.com/rs/zerolog/log"
 )
 
-// GeminiPreflight checks that gemini CLI is installed.
+// GeminiPreflight checks that the agy (Antigravity) CLI is installed.
+// rival drives Gemini 3.5 Flash through agy; the legacy gemini CLI is no
+// longer used because its backend does not serve the 3.5-flash model.
 func GeminiPreflight() error {
-	if _, err := exec.LookPath("gemini"); err != nil {
-		return fmt.Errorf("gemini CLI not installed. Install: npm install -g @google/gemini-cli")
+	if _, err := exec.LookPath("agy"); err != nil {
+		return fmt.Errorf("agy CLI not installed. Install the Antigravity CLI (agy) and sign in")
 	}
 	return nil
 }
 
-// RunGemini executes a prompt through the Gemini CLI.
+// RunGemini executes a prompt through the Antigravity CLI (agy), which runs
+// Gemini 3.5 Flash. agy -p is an agentic print mode: it returns a single
+// response non-interactively. --sandbox auto-approves read-only tool calls so
+// the reviewer never blocks on a permission prompt. The prompt is delivered on
+// stdin by RunSubprocess; effort has no agy equivalent and is intentionally
+// ignored.
 func RunGemini(ctx context.Context, sess *session.Session, prompt, effort, workdir string, mirror io.Writer) (*Result, error) {
-	// Create temp dir for GEMINI_HOME.
-	tmpDir, err := os.MkdirTemp("", "rival-gemini-*")
-	if err != nil {
-		return nil, fmt.Errorf("create gemini temp dir: %w", err)
-	}
-	defer func() {
-		if removeErr := os.RemoveAll(tmpDir); removeErr != nil {
-			log.Warn().Err(removeErr).Str("dir", tmpDir).Msg("failed to clean up gemini temp dir")
-		}
-	}()
-
-	// Write settings.json with thinkingLevel config (gen3 only).
-	level := config.GeminiThinkingLevel[effort]
-	if level == "" {
-		level = "MEDIUM"
-	}
-
-	settings := map[string]any{
-		"modelConfigs": map[string]any{
-			"customAliases": map[string]any{
-				config.GeminiModel: map[string]any{
-					"extends": "chat-base-3",
-					"modelConfig": map[string]any{
-						"model": config.GeminiModel,
-						"generateContentConfig": map[string]any{
-							"thinkingConfig": map[string]any{
-								"thinkingLevel": level,
-							},
-						},
-					},
-				},
-			},
-		},
-	}
-	settingsJSON, err := json.Marshal(settings)
-	if err != nil {
-		return nil, fmt.Errorf("marshal gemini settings: %w", err)
-	}
-
-	settingsPath := filepath.Join(tmpDir, "settings.json")
-	if err := os.WriteFile(settingsPath, settingsJSON, 0600); err != nil {
-		return nil, fmt.Errorf("write gemini settings: %w", err)
-	}
-
 	args := []string{
-		"-m", config.GeminiModel,
+		"-p",
 		"--sandbox",
 	}
 
-	env := []string{
-		fmt.Sprintf("GEMINI_HOME=%s", tmpDir),
-	}
-
+	env := os.Environ()
 	fullPrompt := config.SystemPrompt + "\n\n" + prompt
-	return RunSubprocess(ctx, sess, "gemini", args, env, fullPrompt, mirror)
+	return RunSubprocess(ctx, sess, "agy", args, env, fullPrompt, mirror)
 }

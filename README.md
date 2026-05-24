@@ -2,7 +2,7 @@
 
 <img src="assets/banner2.png" width="600px">
 
-Dispatch prompts to external AI CLIs from Claude Code. Run GPT-5.5 via Codex, Gemini 3.1 Pro via Gemini CLI, or Claude Opus 4.6 (1M) via Claude Code CLI — as isolated subagents that keep your main context clean.
+Dispatch prompts to external AI CLIs from Claude Code. Run GPT-5.5 via Codex, Gemini 3.5 Flash via the Antigravity CLI (`agy`), or Claude Opus 4.6 (1M) via Claude Code CLI — as isolated subagents that keep your main context clean.
 
 ## Install
 
@@ -29,7 +29,7 @@ Use `rival install --force` to overwrite without prompting.
 ### Prerequisites
 
 - [Codex CLI](https://github.com/openai/codex): `npm install -g @openai/codex` + `codex login`
-- [Gemini CLI](https://github.com/google-gemini/gemini-cli): `npm install -g @google/gemini-cli` + set `GEMINI_API_KEY`
+- [Antigravity CLI (`agy`)](https://antigravity.google): runs Gemini 3.5 Flash — install Antigravity and sign in with your Google account
 - [Claude Code CLI](https://docs.anthropic.com/en/docs/claude-code/overview): install + authenticate (or use Docker — see below)
 
 You only need the CLIs for the commands you use. Megareview uses all available CLIs.
@@ -294,7 +294,7 @@ Claude auto-detects its execution mode:
 | CLI | Model | Default Effort |
 |-----|-------|---------------|
 | Codex | `gpt-5.5` | xhigh |
-| Gemini | `gemini-3.1-pro-preview` | xhigh |
+| Gemini | `gemini-3.5-flash` | xhigh |
 | Claude | `claude-opus-4-6[1m]` | max |
 
 ## Uninstall

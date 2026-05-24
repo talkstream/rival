@@ -8,7 +8,7 @@ import (
 func TestBuildConsiliumPrompt_NilParsedBounded(t *testing.T) {
 	bigRaw := strings.Repeat("X", 1_000_000)
 	inputs := []ReviewInput{
-		{CLI: "gemini", Model: "gemini-3.1-pro", Role: "arch_security", RawOutput: bigRaw},
+		{CLI: "gemini", Model: "gemini-3.5-flash", Role: "arch_security", RawOutput: bigRaw},
 		{CLI: "codex", Model: "gpt-5.5", Role: "bug_hunter", RawOutput: "small"},
 	}
 	prompt := BuildConsiliumPrompt(inputs, "the entire project", 6)

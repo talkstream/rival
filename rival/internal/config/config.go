@@ -9,7 +9,7 @@ import (
 
 const (
 	CodexModel  = "gpt-5.5"
-	GeminiModel = "gemini-3.1-pro-preview"
+	GeminiModel = "gemini-3.5-flash"
 	ClaudeModel          = "claude-opus-4-6[1m]"
 	ClaudeDockerImage    = "rival-claude"
 	ClaudeDockerTokenEnv = "RIVAL_CLAUDE_TOKEN"
@@ -33,14 +33,6 @@ var ClaudeEffortLevel = map[string]string{
 
 // SystemPrompt is prepended as a system instruction to all CLI invocations.
 const SystemPrompt = `Answer the user's question directly. Do not offer follow-up options, menus, walkthroughs, or ask if they want more. No filler, no sign-offs. Just deliver the answer and stop.`
-
-// Gen3 only — thinkingLevel mapping.
-var GeminiThinkingLevel = map[string]string{
-	"low":    "LOW",
-	"medium": "MEDIUM",
-	"high":   "HIGH",
-	"xhigh":  "HIGH",
-}
 
 // DiffReviewPreamble is prepended to ReviewPrompt when git auto-detects changed files.
 // {FILES} is replaced with the newline-separated file list at runtime.
