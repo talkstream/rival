@@ -2,6 +2,7 @@ package main
 
 import (
 	"os"
+	"strings"
 
 	"github.com/1F47E/rival/cmd"
 	"github.com/joho/godotenv"
@@ -22,6 +23,8 @@ func main() {
 		Str("app", "rival").
 		Logger()
 
-	cmd.Version = version
+	// git describe / release tags carry a leading "v" (e.g. "v3.10.0"); the CLI
+	// prints versions as "v%s", so strip it here to avoid a doubled "vv".
+	cmd.Version = strings.TrimPrefix(version, "v")
 	cmd.Execute()
 }
