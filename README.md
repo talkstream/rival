@@ -294,8 +294,14 @@ Claude auto-detects its execution mode:
 | CLI | Model | Default Effort |
 |-----|-------|---------------|
 | Codex | `gpt-5.5` | xhigh |
-| Gemini | `gemini-3.5-flash` | xhigh |
+| Gemini | `gemini-3.5-flash` | xhigh¹ |
 | Claude | `claude-opus-4-6[1m]` | max |
+
+¹ Gemini runs via the Antigravity CLI (`agy`), which has no reasoning-effort knob — the `-re` flag is accepted for parity with the other CLIs but is not forwarded.
+
+## Privacy
+
+This build sends **no telemetry**. There is no analytics, crash reporting, or usage tracking, and no network calls beyond the AI CLIs you invoke and the once-a-day GitHub release check (which you can disable with `RIVAL_NO_UPDATE_CHECK=1`).
 
 ## Uninstall
 
