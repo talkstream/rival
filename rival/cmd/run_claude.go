@@ -66,7 +66,7 @@ func runClaudeAction(cmd *cobra.Command, args []string) error {
 		return fmt.Errorf("empty prompt")
 	}
 
-	sess, err := session.New("claude", mode, config.ClaudeModel, effort, workdir, prompt, reviewScope, "")
+	sess, err := session.New(session.Opts{CLI: "claude", Mode: mode, Model: config.ClaudeModel, Effort: effort, WorkDir: workdir, Prompt: prompt, ReviewScope: reviewScope})
 	if err != nil {
 		return fmt.Errorf("create session: %w", err)
 	}
