@@ -4,7 +4,6 @@ import (
 	"os"
 
 	"github.com/1F47E/rival/cmd"
-	"github.com/1F47E/rival/internal/telemetry"
 	"github.com/joho/godotenv"
 	"github.com/rs/zerolog"
 	"github.com/rs/zerolog/log"
@@ -22,9 +21,6 @@ func main() {
 		Timestamp().
 		Str("app", "rival").
 		Logger()
-
-	telemetry.Init(version)
-	defer telemetry.Flush()
 
 	cmd.Version = version
 	cmd.Execute()
