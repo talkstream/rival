@@ -15,14 +15,13 @@ import (
 )
 
 const geminiUsage = `Usage:
-  /rival-gemini 'explain the auth flow' — run any prompt via gemini
-  /rival-gemini -re high 'analyze this complex algorithm' — use high thinking budget
+  /rival-gemini 'explain the auth flow' — run any prompt via Gemini 3.5 Flash
   /rival-gemini review — ruthless code review of the entire project
   /rival-gemini review src/api/ — review specific scope
-  /rival-gemini -re xhigh review src/api/ — review with xhigh reasoning
   /rival-gemini — show this usage info
 
-Reasoning effort (-re): low, medium (default), high, xhigh`
+Gemini runs via the Antigravity CLI (agy). The -re effort flag is accepted for
+compatibility with the other CLIs but is not forwarded — agy has no thinking-level knob.`
 
 var commandGeminiCmd = &cobra.Command{
 	Use:   "gemini",

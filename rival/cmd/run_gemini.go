@@ -16,7 +16,7 @@ import (
 
 var runGeminiCmd = &cobra.Command{
 	Use:   "gemini",
-	Short: "Run Gemini CLI",
+	Short: "Run Gemini 3.5 Flash via the Antigravity CLI (agy)",
 	RunE:  runGeminiAction,
 }
 
