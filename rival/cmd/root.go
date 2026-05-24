@@ -6,7 +6,6 @@ import (
 	"os"
 
 	"github.com/1F47E/rival/internal/session"
-	"github.com/1F47E/rival/internal/telemetry"
 	"github.com/1F47E/rival/internal/update"
 	"github.com/spf13/cobra"
 )
@@ -49,7 +48,6 @@ var rootCmd = &cobra.Command{
 }
 
 func Execute() {
-	defer telemetry.RecoverPanic()
 	if err := rootCmd.Execute(); err != nil {
 		var exitErr *ExitCodeError
 		if errors.As(err, &exitErr) {
